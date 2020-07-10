@@ -1,0 +1,9 @@
+server:
+  port: 8081
+
+netty:
+  sn: 123
+  localPort: 9999
+  localHost: 127.0.0.1
+  remotePort: 19999
+  remoteHost: 127.0.0.1
