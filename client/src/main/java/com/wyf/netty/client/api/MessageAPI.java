@@ -20,10 +20,8 @@ public class MessageAPI {
     @Autowired
     private NettyProperties nettyProperties;
     @GetMapping("send")
-    public String send(String sn){
-        if(nettyProperties.getSn().equals(sn)){
-            return "no";
-        }
+    public String send(String topic){
+
         NettyMessage nettyMessage = new NettyMessage();
         Header header = new Header();
         header.setSn(nettyProperties.getSn());
@@ -31,7 +29,25 @@ public class MessageAPI {
         header.setSerialNumber(RandomUtil.randomLong());
         Map<String,Object> body = new HashMap<>();
         body.put("content","nihao");
-        body.put("to",sn);
+        body.put("topic",topic);
+        nettyMessage.setHeader(header);
+        nettyMessage.setBody(body);
+        if(Const.client_ctx!=null){
+            Const.client_ctx.writeAndFlush(nettyMessage);
+        }
+        return "ok";
+    }
+
+
+    @GetMapping("sub")
+    public String sub(String topic){
+
+        NettyMessage nettyMessage = new NettyMessage();
+        Header header = new Header();
+        header.setSn(nettyProperties.getSn());
+        header.setType(MessageType.SUBSCRIBE_REQ.value());
+        Map<String,Object> body = new HashMap<>();
+        body.put("topic",topic);
         nettyMessage.setHeader(header);
         nettyMessage.setBody(body);
         if(Const.client_ctx!=null){

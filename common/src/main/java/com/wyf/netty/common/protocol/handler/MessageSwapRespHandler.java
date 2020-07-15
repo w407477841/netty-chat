@@ -9,6 +9,8 @@ import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map;
+
 @Slf4j
 public class MessageSwapRespHandler extends ChannelHandlerAdapter {
 
@@ -24,7 +26,7 @@ public class MessageSwapRespHandler extends ChannelHandlerAdapter {
 
             }else{
                 nettyMessage.getHeader().setType(MessageType.MESSAGE_SWAP_RESP.value());
-                toCtx.writeAndFlush(buildMessage(nettyMessage.getHeader(), ResultCode.SUCCESS));
+                toCtx.writeAndFlush(buildMessage(nettyMessage.getHeader(),nettyMessage.getBody(), ResultCode.SUCCESS));
             }
         }else{
             ctx.fireChannelRead(msg);
@@ -32,14 +34,14 @@ public class MessageSwapRespHandler extends ChannelHandlerAdapter {
 
     }
 
-    private NettyMessage buildMessage(Header header , ResultCode code){
+    private NettyMessage buildMessage(Header header , Map<String,Object>  body, ResultCode code){
         NettyMessage toMessage = new NettyMessage();
         Header toHeader = header;
         toHeader.setType(MessageType.MESSAGE_RESP.value());
         toMessage.setHeader(toHeader);
-        toMessage.getBody().put("code",code.code());
-        toMessage.getBody().put("msg",code.msg());
-
+        body.put("code",code.code());
+        body.put("msg",code.msg());
+        toMessage.setBody(body);
         return toMessage;
     }
 

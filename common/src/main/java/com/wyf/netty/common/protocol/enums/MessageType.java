@@ -13,6 +13,12 @@ public enum MessageType {
     MESSAGE_RESP(6),
     MESSAGE_SWAP_REQ(7),
     MESSAGE_SWAP_RESP(8),
+
+
+    SUBSCRIBE_REQ(9),
+    SUBSCRIBE_RESP(10),
+    UNSUBSCRIBE_REQ(11),
+    UNSUBSCRIBE_RESP(12),
     ;
 
     private  int type;

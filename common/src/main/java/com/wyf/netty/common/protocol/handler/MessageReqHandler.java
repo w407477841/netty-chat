@@ -18,9 +18,9 @@ public class MessageReqHandler extends ChannelHandlerAdapter {
 
         if(nettyMessage.getHeader().getType() == MessageType.MESSAGE_RESP.value()){
             if(ResultCode.SUCCESS.code().equals(nettyMessage.getBody().get("code"))){
-                log.info("消息[{}]发送成功",nettyMessage.getHeader().getSerialNumber());
+                log.info("topic:[{}] sn:[{}] 消息[{}]发送成功",nettyMessage.getBody().get("topic"),nettyMessage.getBody().get("sn"),nettyMessage.getHeader().getSerialNumber());
             }else{
-                log.info("消息[{}]发送失败",nettyMessage.getHeader().getSerialNumber());
+                log.info("topic:[{}] 消息[{}]发送失败",nettyMessage.getBody().get("topic"),nettyMessage.getHeader().getSerialNumber());
             }
         }else{
             ctx.fireChannelRead(msg);

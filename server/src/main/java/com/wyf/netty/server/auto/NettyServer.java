@@ -44,6 +44,8 @@ public class NettyServer {
                                 .addLast("ReadTimeoutHandler", new ReadTimeoutHandler(60))
                                 .addLast("LoginAuthRespHandler", new LoginAuthRespHandler())
                                 .addLast("HeartBeatRespHandler", new HeartBeatRespHandler())
+                                .addLast("SubscribeRespHandler",new SubscribeRespHandler())
+                                .addLast("UnSubscribeRespHandler",new UnSubscribeRespHandler())
                                 .addLast("MessageSwapReqHandler", new MessageSwapReqHandler())
                                 .addLast("MessageSwapRespHandler", new MessageSwapRespHandler())
                                 .addLast("ExceptionRespHandler",new ExceptionRespHandler())

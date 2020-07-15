@@ -8,6 +8,9 @@ import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Slf4j
 public class ExceptionRespHandler extends ChannelHandlerAdapter {
 
@@ -48,10 +51,12 @@ public class ExceptionRespHandler extends ChannelHandlerAdapter {
         NettySession nettySession = ctx.channel().attr(Const.NETTY_SESSION).get();
         if(nettySession!=null){
             Const.nodeCheck.remove(nettySession.getSn());
+            for (String s : nettySession.getTopic()) {
+                Const.subscribeMap.get(s).remove(nettySession.getSn());
+            }
             log.error("设备[{}][{}]离线",nettySession.getSn(),ctx.channel().remoteAddress().toString());
         }else{
             log.error("匿名设备[{}]离线",ctx.channel().remoteAddress().toString());
         }
-
     }
 }

@@ -69,8 +69,10 @@ public class NettyClient implements ApplicationRunner {
                                     .addLast("ReadTimeoutHandler", new ReadTimeoutHandler(60))
                                     .addLast("LoginAuthReqHandler", new LoginAuthReqHandler(sn))
                                     .addLast("HeartBeatReqhandler", new HeartBeatReqhandler())
+                                    .addLast("SubscribeReqHandler",new SubscribeReqHandler())
+                                    .addLast("UnSubscribeReqHandler",new UnSubscribeReqHandler())
                                     .addLast("MessageReqHandler", new MessageReqHandler())
-                                    .addLast("MessageRespHandler", new MessageRespHandler())
+                                    .addLast("MessageRespHandler", new MessageRespHandler(sn))
                                     .addLast("ExceptionReqHandler",new ExceptionReqHandler())
                                     ;
                         }

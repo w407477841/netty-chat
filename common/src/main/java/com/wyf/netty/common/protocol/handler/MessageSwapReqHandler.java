@@ -9,6 +9,9 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.util.Map;
+import java.util.Set;
+
 public class MessageSwapReqHandler extends ChannelHandlerAdapter {
 
     @Override
@@ -16,17 +19,25 @@ public class MessageSwapReqHandler extends ChannelHandlerAdapter {
         NettyMessage nettyMessage = (NettyMessage) msg;
 
         if(nettyMessage.getHeader().getType()== MessageType.MESSAGE_REQ.value()){
-            String to = (String) nettyMessage.getBody().get("to");
-            ChannelHandlerContext toChannel =  Const.nodeCheck.get(to);
-            if(toChannel==null){
-                ctx.writeAndFlush(buildMessage(nettyMessage.getHeader(),ResultCode.ERROR));
+            String topic = (String) nettyMessage.getBody().get("topic");
+
+            if(!Const.subscribeMap.containsKey(topic)){
+                ctx.writeAndFlush(buildMessage(nettyMessage.getHeader(),nettyMessage.getBody(),ResultCode.ERROR));
             }else{
-                NettyMessage toMessage = nettyMessage;
-                toMessage.getHeader().setType(MessageType.MESSAGE_SWAP_REQ.value());
-                toChannel.writeAndFlush(toMessage);
+                Set<String> sns = Const.subscribeMap.get(topic);
+                for (String to : sns) {
+                    if(!to.equals(nettyMessage.getHeader().getSn())){
+                        // 剔除自己
+                        ChannelHandlerContext toChannel =  Const.nodeCheck.get(to);
+                        if(toChannel!=null){
+                            NettyMessage toMessage = nettyMessage;
+                            toMessage.getHeader().setType(MessageType.MESSAGE_SWAP_REQ.value());
+                            toChannel.writeAndFlush(toMessage);
+                        }
+                    }
+
+                }
             }
-
-
 
         }else{
             ctx.fireChannelRead(msg);
@@ -34,14 +45,14 @@ public class MessageSwapReqHandler extends ChannelHandlerAdapter {
     }
 
 
-    private NettyMessage buildMessage(Header header , ResultCode code){
+    private NettyMessage buildMessage(Header header, Map<String, Object> body, ResultCode code){
         NettyMessage toMessage = new NettyMessage();
         Header toHeader = header;
         toHeader.setType(MessageType.MESSAGE_RESP.value());
         toMessage.setHeader(toHeader);
-        toMessage.getBody().put("code",code.code());
-        toMessage.getBody().put("msg",code.msg());
-
+        body.put("code",code.code());
+        body.put("msg",code.msg());
+        toMessage.setBody(body);
         return toMessage;
     }
 
