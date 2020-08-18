@@ -17,11 +17,22 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 
 @Slf4j
-public class NettyServer {
+public class NettyServer implements ApplicationRunner {
 
-    public void bind(int port ,String host) throws Exception{
+    private int port;
+
+    private String host;
+
+    public NettyServer(int port, String host) {
+        this.port = port;
+        this.host = host;
+    }
+
+    public void bind(int port , String host) throws Exception{
 
         EventLoopGroup bossGroup = new NioEventLoopGroup();
 
@@ -58,4 +69,8 @@ public class NettyServer {
         log.info("服务器启动成功");
     }
 
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        bind(port , host);
+    }
 }

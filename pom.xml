@@ -12,6 +12,8 @@
         <module>common</module>
         <module>client</module>
         <module>server</module>
+        <module>test-server</module>
+        <module>test-client</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

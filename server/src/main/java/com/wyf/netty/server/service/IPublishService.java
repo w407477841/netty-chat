@@ -2,6 +2,7 @@ package com.wyf.netty.server.service;
 
 public interface IPublishService {
 
-    void  exec(String topic,String content);
-
+    String [] topics();
+    int port();
+    String host();
 }

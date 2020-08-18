@@ -2,30 +2,43 @@ package com.wyf.netty.server;
 
 import com.wyf.netty.common.protocol.Const;
 import com.wyf.netty.server.auto.NettyServer;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.wyf.netty.server.service.IPublishService;
+import com.wyf.netty.server.service.impl.SimplePublishService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.HashSet;
 
-@SpringBootApplication
+@Configuration
+@Slf4j
 public class ServerApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(ServerApplication.class,args);
-        NettyServer nettyServer = new NettyServer();
-        try {
-            // 初始化 topic列表
-            String [] topics = {"abc","def"};
 
-            for (String topic : topics) {
-                Const.subscribeMap.put(topic,new HashSet<>());
-            }
-            nettyServer.bind(19999,"127.0.0.1");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    /**
+     * 默认实现
+     * 初始化 topic
+     * 设置连接ip、端口
+     * @return
+     */
+    @Bean
+    @ConditionalOnMissingBean(value = IPublishService.class)
+    public IPublishService publishService(){
+        return new SimplePublishService();
     }
 
+    @Bean
+    public NettyServer nettyServer(){
+        // 初始化 topic列表
+        String [] topics = publishService().topics();
+        log.info("topic:{}",topics.toString());
+        for (String topic : topics) {
+            Const.subscribeMap.put(topic,new HashSet<>());
+        }
+        NettyServer nettyServer = new NettyServer(publishService().port(),publishService().host());
+        return nettyServer;
+    }
 
 
 }
