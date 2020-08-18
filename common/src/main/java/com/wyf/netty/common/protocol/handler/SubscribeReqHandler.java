@@ -12,6 +12,9 @@ import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 订阅消息
+ */
 @Slf4j
 public class SubscribeReqHandler extends ChannelHandlerAdapter {
 

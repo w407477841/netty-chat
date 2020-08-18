@@ -18,6 +18,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 验证客户端有效性
+ */
 public class LoginAuthRespHandler extends ChannelHandlerAdapter {
 
 
@@ -41,6 +44,7 @@ public class LoginAuthRespHandler extends ChannelHandlerAdapter {
                 InetSocketAddress inetSocketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
                 String ip = inetSocketAddress.getAddress().getHostAddress();
                 boolean isOK = false;
+                // 白名单
                 for (String s : Const.whiteList) {
                     if(ip.equals(s)){
                         isOK = true;

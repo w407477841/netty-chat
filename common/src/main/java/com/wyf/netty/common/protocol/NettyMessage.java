@@ -10,9 +10,9 @@ import java.util.Map;
  */
 @Data
 public final class NettyMessage {
-
+    /** 消息头 */
     private Header header;
-
+    /** 消息体 */
     private Map<String,Object> body = new HashMap<>();
 
 }

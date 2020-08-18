@@ -12,6 +12,11 @@ import io.netty.channel.ChannelHandlerContext;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ *
+ * 消息中转
+ *
+ */
 public class MessageSwapReqHandler extends ChannelHandlerAdapter {
 
     @Override

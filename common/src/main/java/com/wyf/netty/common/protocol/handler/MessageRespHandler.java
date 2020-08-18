@@ -9,7 +9,9 @@ import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 
-
+/**
+ * 接受消息
+ */
 @Slf4j
 public class MessageRespHandler extends ChannelHandlerAdapter {
 

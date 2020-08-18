@@ -11,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
+/**
+ * 消息中转
+ */
 @Slf4j
 public class MessageSwapRespHandler extends ChannelHandlerAdapter {
 

@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
+/**
+ * 取消订阅
+ */
 @Slf4j
 public class UnSubscribeReqHandler extends ChannelHandlerAdapter {
 

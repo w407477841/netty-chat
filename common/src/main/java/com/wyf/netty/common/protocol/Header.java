@@ -10,7 +10,7 @@ import java.util.Map;
  */
 @Data
 public final class Header {
-
+    /** 结束符 */
     public static String END = "#@#";
     /** 设备号 */
     private String sn;
